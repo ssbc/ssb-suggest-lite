@@ -67,9 +67,6 @@ test('generate fixture', (t) => {
   });
 });
 
-// @DD85UcOClexP25DZUho84Z094NVZHKpBfiDdfqeA5qc=.ed25519 => quis laboris
-// @BLi0h5STzJkSiHwkKT8XtrpmiYzDTw3TCVXNEuGTLOw=.ed25519 => consequat
-
 test('ssb-suggest-lite on input "labor"', (t) => {
   const keys = ssbKeys.loadOrCreateSync(path.join(dir, 'secret'));
   const sbot = SecretStack({appKey: caps.shs})
