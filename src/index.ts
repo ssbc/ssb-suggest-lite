@@ -55,7 +55,7 @@ function matches(subject: string, target: string) {
   }
 }
 
-@plugin('2.0.0')
+@plugin('1.0.0')
 class suggest {
   private readonly ssb: Required<SSB>;
   private readonly cache: Map<string, Profile>;
