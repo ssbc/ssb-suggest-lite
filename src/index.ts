@@ -25,6 +25,9 @@ interface Config {
   suggest?: {
     autostart?: boolean;
   };
+  friends?: {
+    hops?: number;
+  };
 }
 
 interface Opts {
@@ -60,6 +63,7 @@ class suggest {
   private readonly ssb: Required<SSB>;
   private readonly cache: Map<string, Profile>;
   private readonly started: ReturnType<typeof Deferred>;
+  private readonly maxHops: number;
 
   constructor(ssb: SSB, config: Config) {
     if (!ssb.db?.query) {
@@ -71,6 +75,7 @@ class suggest {
     this.ssb = ssb as Required<SSB>;
     this.cache = new Map();
     this.started = Deferred();
+    this.maxHops = config.friends?.hops ?? 1;
 
     if (config.suggest?.autostart ?? true) this.start();
   }
@@ -95,7 +100,7 @@ class suggest {
         for (let i = 0, n = feedIds.length; i < n; i++) {
           const feedId = feedIds[i];
           const isLast = i === n - 1;
-          if (hops[feedId] >= 0 && hops[feedId] <= 1) {
+          if (hops[feedId] >= 0 && hops[feedId] <= this.maxHops) {
             const aboutSelf = this.ssb.db.getIndex('aboutSelf');
             this.ssb.db.onDrain('aboutSelf', () => {
               const profile = aboutSelf.getProfile(feedId);
