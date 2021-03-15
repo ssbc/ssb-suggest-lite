@@ -134,7 +134,7 @@ class suggest {
           .map(([, profile]) => profile);
 
         if (typeof opts.limit === 'number') {
-          results.slice(0, opts.limit);
+          results = results.slice(0, opts.limit);
         }
 
         cb(null, results);
