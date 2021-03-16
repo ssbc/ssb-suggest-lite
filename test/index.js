@@ -85,6 +85,24 @@ test('ssb-suggest-lite on input "labor"', (t) => {
   });
 });
 
+test('ssb-suggest-lite on input "LABOR"', (t) => {
+  const keys = ssbKeys.loadOrCreateSync(path.join(dir, 'secret'));
+  const sbot = SecretStack({appKey: caps.shs})
+    .use(require('ssb-db2'))
+    .use(require('ssb-db2/about-self'))
+    .use(require('ssb-friends'))
+    .use(require('../lib/index'))
+    .call(null, {keys, path: dir});
+
+  sbot.suggest.profile({text: 'LABOR', limit: 5}, (err, results) => {
+    t.error(err);
+    t.equals(results.length, 1);
+    t.equals(results[0].id, keys.id);
+    t.equals(results[0].name, 'labore qui fugiat');
+    sbot.close(t.end);
+  });
+});
+
 test('ssb-suggest-lite supports opts.limit', (t) => {
   const keys = ssbKeys.loadOrCreateSync(path.join(dir, 'secret'));
   const sbot = SecretStack({appKey: caps.shs})

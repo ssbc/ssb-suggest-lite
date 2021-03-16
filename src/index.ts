@@ -50,7 +50,7 @@ const collator =
 function matches(subject: string, target: string) {
   const _subject = subject.toLocaleLowerCase()
   const _target = target.toLocaleLowerCase()
-  const slicedSubject = _subject.slice(0, _target.length).toLocaleLowerCase();
+  const slicedSubject = _subject.slice(0, _target.length);
   if (collator) {
     return collator.compare(slicedSubject, _target) === 0;
   } else if (slicedSubject.localeCompare(_target) === 0) {
