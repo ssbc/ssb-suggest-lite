@@ -48,13 +48,15 @@ const collator =
     : null;
 
 function matches(subject: string, target: string) {
-  const slicedSubject = subject.slice(0, target.length);
+  const _subject = subject.toLocaleLowerCase()
+  const _target = target.toLocaleLowerCase()
+  const slicedSubject = _subject.slice(0, _target.length).toLocaleLowerCase();
   if (collator) {
-    return collator.compare(slicedSubject, target) === 0;
-  } else if (slicedSubject.localeCompare(target) === 0) {
+    return collator.compare(slicedSubject, _target) === 0;
+  } else if (slicedSubject.localeCompare(_target) === 0) {
     return true;
   } else {
-    return subject.startsWith(target);
+    return _subject.startsWith(_target);
   }
 }
 
