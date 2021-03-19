@@ -17,11 +17,15 @@ jobs:
         node-version: [10.x, 12.x, 14.x]
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Checkout the repo
+        uses: actions/checkout@v2
+      - name: Set up Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm install
-      - name: npm test
+      - name: pnpm install
+        uses: jaid/action-npm-install@v1.2.1
+        with:
+          packageManager: 'pnpm'
+      - name: Test
         run: npm test
