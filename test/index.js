@@ -8,6 +8,7 @@ const ssbKeys = require('ssb-keys');
 const pull = require('pull-stream');
 const fromEvent = require('pull-stream-util/from-event');
 const {
+  where,
   and,
   type,
   descending,
@@ -53,7 +54,7 @@ test('generate fixture', (t) => {
           t.true(fs.existsSync(newLogPath), 'ssb-db2 migration completed');
 
           sbot.db.query(
-            and(type('about'), author(keys.id, {dedicated: true})),
+            where(and(type('about'), author(keys.id, {dedicated: true}))),
             descending(),
             paginate(100),
             toCallback((err, {results, total}) => {
@@ -118,7 +119,6 @@ test('ssb-suggest-lite supports opts.limit', (t) => {
     sbot.close(t.end);
   });
 });
-
 
 test('ssb-suggest-lite with defaultIds', (t) => {
   const keys = ssbKeys.loadOrCreateSync(path.join(dir, 'secret'));
