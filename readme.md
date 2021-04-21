@@ -18,13 +18,14 @@ npm install ssb-suggest-lite
 
 - Requires **Node.js 6.5** or higher
 - Requires `secret-stack@^6.2.0`
-- Requires `ssb-db2`
+- Requires `ssb-db2` and the `aboutSelf` plugin
 - Requires `ssb-friends@>=4.4.4`
 
 ```diff
  SecretStack({appKey: require('ssb-caps').shs})
    .use(require('ssb-master'))
 +  .use(require('ssb-db2'))
++  .use(require('ssb-db2/about-self'))
 +  .use(require('ssb-friends'))
    .use(require('ssb-conn'))
    .use(require('ssb-blobs'))
