@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2021 Andre Staltz
+
+SPDX-License-Identifier: CC0-1.0
+-->
+
 # ssb-suggest-lite
 
 > An SSB secret-stack plugin for fetching profiles of authors that match a name
