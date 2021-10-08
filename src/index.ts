@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2021 Andre Staltz
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 import {plugin, muxrpc} from 'secret-stack-decorators';
 import {BlobId, FeedId} from 'ssb-typescript';
 const pull = require('pull-stream');
