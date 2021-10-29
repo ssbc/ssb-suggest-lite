@@ -32,7 +32,6 @@
   },
   "devDependencies": {
     "@types/node": "^14.14.39",
-    "faucet": "0.0.1",
     "nyc": "^15.0.0",
     "pull-async": "1.0.0",
     "pull-cat": "1.1.11",
@@ -47,13 +46,15 @@
     "ssb-keys": "8.2.0",
     "ssb-suggest": "^1.3.0",
     "ssb-validate": "^4.1.4",
+    "tap-bail": "^1.0.0",
+    "tap-spec": "^5.0.0",
     "tape": "^5.2.0",
     "ts-node": "^9.1.1",
     "typescript": "~4.2.4"
   },
   "scripts": {
     "compile": "tsc",
-    "tape": "tape test/index.js | faucet",
+    "tape": "tape test/index.js | tap-bail | tap-spec",
     "test": "npm run compile && npm run tape",
     "coverage": "nyc npm run test"
   }
