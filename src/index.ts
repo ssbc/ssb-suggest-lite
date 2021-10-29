@@ -154,7 +154,8 @@ class suggest {
     });
 
     // Refresh every hour
-    setInterval(this.start, 60 * 60 * 1000);
+    const interval = setInterval(this.start, 60 * 60 * 1000);
+    if (interval.unref) interval.unref();
   };
 
   @muxrpc('async')
