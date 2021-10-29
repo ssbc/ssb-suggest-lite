@@ -22,7 +22,9 @@
     "node": ">=8"
   },
   "dependencies": {
+    "js-levenshtein": "^1.1.6",
     "p-defer": "^3.0.0",
+    "promisify-tuple": "^1.2.0",
     "pull-stream": "^3.6.2",
     "secret-stack-decorators": "1.1.0",
     "ssb-typescript": "~2.5.0"

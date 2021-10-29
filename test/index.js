@@ -72,39 +72,66 @@ test('generate fixture', (t) => {
   });
 });
 
-test('ssb-suggest-lite on input "labor"', (t) => {
+test('ssb-suggest-lite on input "labor qui fu"', (t) => {
   const keys = ssbKeys.loadOrCreateSync(path.join(dir, 'secret'));
   const sbot = SecretStack({appKey: caps.shs})
     .use(require('ssb-db2'))
     .use(require('ssb-db2/about-self'))
     .use(require('ssb-friends'))
     .use(require('../lib/index'))
-    .call(null, {keys, path: dir});
+    .call(null, {keys, path: dir, friends: {hops: 10}});
 
-  sbot.suggest.profile({text: 'labor', limit: 5}, (err, results) => {
+  sbot.suggest.profile({text: 'labor qui fu', limit: 5}, (err, results) => {
     t.error(err);
-    t.equals(results.length, 1);
+    t.equals(results.length, 5);
     t.equals(results[0].id, keys.id);
     t.equals(results[0].name, 'labore qui fugiat');
-    sbot.close(t.end);
+
+    setTimeout(() => {
+      sbot.close(t.end);
+    }, 1000);
   });
 });
 
-test('ssb-suggest-lite on input "LABOR"', (t) => {
+test('ssb-suggest-lite on input "lábór qui fu"', (t) => {
   const keys = ssbKeys.loadOrCreateSync(path.join(dir, 'secret'));
   const sbot = SecretStack({appKey: caps.shs})
     .use(require('ssb-db2'))
     .use(require('ssb-db2/about-self'))
     .use(require('ssb-friends'))
     .use(require('../lib/index'))
-    .call(null, {keys, path: dir});
+    .call(null, {keys, path: dir, friends: {hops: 10}});
 
-  sbot.suggest.profile({text: 'LABOR', limit: 5}, (err, results) => {
+  sbot.suggest.profile({text: 'lábór qui fu', limit: 5}, (err, results) => {
     t.error(err);
-    t.equals(results.length, 1);
+    t.equals(results.length, 5);
     t.equals(results[0].id, keys.id);
     t.equals(results[0].name, 'labore qui fugiat');
-    sbot.close(t.end);
+
+    setTimeout(() => {
+      sbot.close(t.end);
+    }, 1000);
+  });
+});
+
+test('ssb-suggest-lite on input "LABOR QUI F"', (t) => {
+  const keys = ssbKeys.loadOrCreateSync(path.join(dir, 'secret'));
+  const sbot = SecretStack({appKey: caps.shs})
+    .use(require('ssb-db2'))
+    .use(require('ssb-db2/about-self'))
+    .use(require('ssb-friends'))
+    .use(require('../lib/index'))
+    .call(null, {keys, path: dir, friends: {hops: 10}});
+
+  sbot.suggest.profile({text: 'LABORE QUI F', limit: 5}, (err, results) => {
+    t.error(err);
+    t.equals(results.length, 5);
+    t.equals(results[0].id, keys.id);
+    t.equals(results[0].name, 'labore qui fugiat');
+
+    setTimeout(() => {
+      sbot.close(t.end);
+    }, 1000);
   });
 });
 
@@ -115,12 +142,15 @@ test('ssb-suggest-lite supports opts.limit', (t) => {
     .use(require('ssb-db2/about-self'))
     .use(require('ssb-friends'))
     .use(require('../lib/index'))
-    .call(null, {keys, path: dir});
+    .call(null, {keys, path: dir, friends: {hops: 10}});
 
-  sbot.suggest.profile({text: 'a', limit: 1}, (err, results) => {
+  sbot.suggest.profile({text: 'al', limit: 3}, (err, results) => {
     t.error(err);
-    t.equals(results.length, 1);
-    sbot.close(t.end);
+    t.equals(results.length, 3);
+
+    setTimeout(() => {
+      sbot.close(t.end);
+    }, 1000);
   });
 });
 
@@ -131,7 +161,7 @@ test('ssb-suggest-lite with defaultIds', (t) => {
     .use(require('ssb-db2/about-self'))
     .use(require('ssb-friends'))
     .use(require('../lib/index'))
-    .call(null, {keys, path: dir});
+    .call(null, {keys, path: dir, friends: {hops: 10}});
 
   const ID1 = '@DD85UcOClexP25DZUho84Z094NVZHKpBfiDdfqeA5qc=.ed25519';
   const ID2 = '@BLi0h5STzJkSiHwkKT8XtrpmiYzDTw3TCVXNEuGTLOw=.ed25519';
@@ -143,7 +173,10 @@ test('ssb-suggest-lite with defaultIds', (t) => {
     t.equals(results[0].name, 'quis laboris');
     t.equals(results[1].id, ID2);
     t.equals(results[1].name, 'consequat');
-    sbot.close(t.end);
+
+    setTimeout(() => {
+      sbot.close(t.end);
+    }, 1000);
   });
 });
 
