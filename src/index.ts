@@ -152,6 +152,9 @@ class suggest {
       that.drainer = null;
       fn.apply(this, args);
     });
+
+    // Refresh every hour
+    setInterval(this.start, 60 * 60 * 1000);
   };
 
   @muxrpc('async')
