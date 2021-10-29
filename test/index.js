@@ -72,7 +72,7 @@ test('generate fixture', (t) => {
   });
 });
 
-test('ssb-suggest-lite on input "labor qui fu"', (t) => {
+test('ssb-suggest-lite on input "labor"', (t) => {
   const keys = ssbKeys.loadOrCreateSync(path.join(dir, 'secret'));
   const sbot = SecretStack({appKey: caps.shs})
     .use(require('ssb-db2'))
@@ -81,7 +81,7 @@ test('ssb-suggest-lite on input "labor qui fu"', (t) => {
     .use(require('../lib/index'))
     .call(null, {keys, path: dir, friends: {hops: 10}});
 
-  sbot.suggest.profile({text: 'labor qui fu', limit: 5}, (err, results) => {
+  sbot.suggest.profile({text: 'labor', limit: 5}, (err, results) => {
     t.error(err);
     t.equals(results.length, 5);
     t.equals(results[0].id, keys.id);
@@ -93,7 +93,7 @@ test('ssb-suggest-lite on input "labor qui fu"', (t) => {
   });
 });
 
-test('ssb-suggest-lite on input "lábór qui fu"', (t) => {
+test('ssb-suggest-lite on input "lábór"', (t) => {
   const keys = ssbKeys.loadOrCreateSync(path.join(dir, 'secret'));
   const sbot = SecretStack({appKey: caps.shs})
     .use(require('ssb-db2'))
@@ -102,7 +102,7 @@ test('ssb-suggest-lite on input "lábór qui fu"', (t) => {
     .use(require('../lib/index'))
     .call(null, {keys, path: dir, friends: {hops: 10}});
 
-  sbot.suggest.profile({text: 'lábór qui fu', limit: 5}, (err, results) => {
+  sbot.suggest.profile({text: 'lábór', limit: 5}, (err, results) => {
     t.error(err);
     t.equals(results.length, 5);
     t.equals(results[0].id, keys.id);
@@ -114,7 +114,7 @@ test('ssb-suggest-lite on input "lábór qui fu"', (t) => {
   });
 });
 
-test('ssb-suggest-lite on input "LABOR QUI F"', (t) => {
+test('ssb-suggest-lite on input "LABOR"', (t) => {
   const keys = ssbKeys.loadOrCreateSync(path.join(dir, 'secret'));
   const sbot = SecretStack({appKey: caps.shs})
     .use(require('ssb-db2'))
@@ -123,7 +123,7 @@ test('ssb-suggest-lite on input "LABOR QUI F"', (t) => {
     .use(require('../lib/index'))
     .call(null, {keys, path: dir, friends: {hops: 10}});
 
-  sbot.suggest.profile({text: 'LABORE QUI F', limit: 5}, (err, results) => {
+  sbot.suggest.profile({text: 'LABOR', limit: 5}, (err, results) => {
     t.error(err);
     t.equals(results.length, 5);
     t.equals(results[0].id, keys.id);

@@ -7,7 +7,6 @@ import {BlobId, FeedId, Msg} from 'ssb-typescript';
 import run = require('promisify-tuple');
 const pull = require('pull-stream');
 const {onceWhen} = require('ssb-db2/utils');
-const leven = require('js-levenshtein');
 import Deferred = require('p-defer');
 
 interface CB<T> {
@@ -58,6 +57,7 @@ function normalize(str: string) {
     .toLocaleLowerCase()
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
+    .replace(/ +/g, '')
     .trim();
 }
 
@@ -160,20 +160,24 @@ class suggest {
 
     if (opts.text) {
       let results = [...this.cache.values()]
-        .map((profile) => ({
-          ...profile,
-          levenshtein: leven(normalize(opts.text!), normalize(profile.name)),
-        }))
-        .sort((a, b) => {
-          // ascending order by levenshtein distance if distance is significant
-          if (Math.abs(a.levenshtein - b.levenshtein) > 2) {
-            return a.levenshtein - b.levenshtein;
-          }
-          // descending order by latest timestamp
-          else {
-            return b.latest - a.latest;
-          }
-        });
+        .map((profile) => {
+          const name = normalize(profile.name);
+          const query = normalize(opts.text!);
+          const score =
+            name === query
+              ? 3
+              : name.startsWith(query)
+              ? 2
+              : name.includes(query)
+              ? 1
+              : 0;
+          return {...profile, score};
+        })
+        .filter((profile) => profile.score > 0)
+        // 3e9 milliseconds is a heuristic that equals roughly 34 days
+        // We want to prioritize names with high scores, unless they are
+        // significantly old (inactive months ago)
+        .sort((a, b) => b.latest + b.score * 3e9 - (a.latest + a.score * 3e9));
 
       if (typeof opts.limit === 'number') {
         results = results.slice(0, opts.limit);
