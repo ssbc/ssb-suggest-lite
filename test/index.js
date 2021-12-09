@@ -72,6 +72,31 @@ test('generate fixture', (t) => {
   });
 });
 
+test('write then suggest', t => {
+  const keys = ssbKeys.loadOrCreateSync(path.join(dir, 'secret'));
+  const sbot = SecretStack({appKey: caps.shs})
+    .use(require('ssb-db2'))
+    .use(require('ssb-db2/about-self'))
+    .use(require('ssb-friends'))
+    .use(require('../lib/index'))
+    .call(null, { keys, path: __dirname + '/foo', friends: {hops: 10} });
+
+  sbot.db.publishAs(keys, {
+      type: 'about',
+      about: keys.id,
+      name: 'alice'
+  }, (err, res) => {
+    console.log('**named alice**', err, res)
+    // now get the profile
+    sbot.suggest.profile({ text: 'alice' }, (err, res) => {
+      console.log('aaaa', err, res)
+      t.equals(results[0].id, keys.id, 'should return the right profile');
+      t.end()
+    })
+  })
+
+})
+
 test('ssb-suggest-lite on input "labor"', (t) => {
   const keys = ssbKeys.loadOrCreateSync(path.join(dir, 'secret'));
   const sbot = SecretStack({appKey: caps.shs})
