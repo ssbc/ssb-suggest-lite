@@ -84,25 +84,33 @@ test('write then suggest', t => {
     .use(require('../lib/index'))
     .call(null, { keys, path: __dirname + '/foo', friends: {hops: 10} });
 
-  sbot.db.publishAs(alice, {
-      type: 'about',
-      about: alice.id,
-      name: 'alice'
-  }, (err) => {
+  sbot.friends.follow(alice.id, null, function (err) {
     if (err) {
       t.fail(err)
       return t.end()
     }
 
-    // now get the profile
-    sbot.suggest.profile({ text: 'alice' }, (err, res) => {
+    sbot.db.publishAs(alice, {
+        type: 'about',
+        about: alice.id,
+        name: 'alice'
+    }, (err) => {
       if (err) {
         t.fail(err)
         return t.end()
       }
-      t.equals(res[0].id, alice.id, 'should return the right profile');
-      t.end()
+
+      // now get the profile
+      sbot.suggest.profile({ text: 'alice' }, (err, res) => {
+        if (err) {
+          t.fail(err)
+          return t.end()
+        }
+        t.equals(res[0].id, alice.id, 'should return the right profile');
+        t.end()
+      })
     })
+
   })
 
 })
