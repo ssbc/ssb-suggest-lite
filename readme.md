@@ -31,6 +31,7 @@ npm install ssb-suggest-lite
  SecretStack({appKey: require('ssb-caps').shs})
    .use(require('ssb-master'))
 +  .use(require('ssb-db2'))
++  .use(require('ssb-db2/compat'))  // required
 +  .use(require('ssb-db2/about-self'))
 +  .use(require('ssb-friends'))
    .use(require('ssb-conn'))
