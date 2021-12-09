@@ -74,23 +74,33 @@ test('generate fixture', (t) => {
 
 test('write then suggest', t => {
   const keys = ssbKeys.loadOrCreateSync(path.join(dir, 'secret'));
+  const alice = ssbKeys.loadOrCreateSync(path.join(dir, 'alice'));
+
   const sbot = SecretStack({appKey: caps.shs})
     .use(require('ssb-db2'))
+    .use(require('ssb-db2/compat'))
     .use(require('ssb-db2/about-self'))
     .use(require('ssb-friends'))
     .use(require('../lib/index'))
     .call(null, { keys, path: __dirname + '/foo', friends: {hops: 10} });
 
-  sbot.db.publishAs(keys, {
+  sbot.db.publishAs(alice, {
       type: 'about',
-      about: keys.id,
+      about: alice.id,
       name: 'alice'
-  }, (err, res) => {
-    console.log('**named alice**', err, res)
+  }, (err) => {
+    if (err) {
+      t.fail(err)
+      return t.end()
+    }
+
     // now get the profile
     sbot.suggest.profile({ text: 'alice' }, (err, res) => {
-      console.log('aaaa', err, res)
-      t.equals(results[0].id, keys.id, 'should return the right profile');
+      if (err) {
+        t.fail(err)
+        return t.end()
+      }
+      t.equals(res[0].id, alice.id, 'should return the right profile');
       t.end()
     })
   })
