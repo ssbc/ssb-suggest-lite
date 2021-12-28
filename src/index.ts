@@ -67,7 +67,7 @@ class suggest {
   private readonly cache: Map<FeedId, Profile>;
   private readonly started: ReturnType<typeof Deferred>;
   private readonly maxHops: number;
-  private drainer: any;
+  private drainer: {abort: CallableFunction} | null = null;
 
   constructor(ssb: SSB, config: Config) {
     if (!ssb.db?.query) {
@@ -148,14 +148,16 @@ class suggest {
 
     const that = this;
     this.ssb.close.hook(function (this: any, fn: any, args: any) {
-      that.drainer.abort();
-      that.drainer = null;
+      if (that.drainer) {
+        that.drainer.abort();
+        that.drainer = null;
+      }
       fn.apply(this, args);
     });
 
     // Refresh every hour
     const interval = setInterval(this.start, 60 * 60 * 1000);
-    if (interval.unref) interval.unref();
+    interval?.unref?.();
   };
 
   @muxrpc('async')
