@@ -94,6 +94,24 @@ class suggest {
 
   @muxrpc('sync')
   public start = () => {
+    const that = this;
+    this.ssb.close.hook(function (this: any, fn: any, args: any) {
+      if (that.drainer) {
+        that.drainer.abort();
+        that.drainer = null;
+      }
+      fn.apply(this, args);
+    });
+
+    // Update cache now
+    this.updateCache();
+
+    // Update cache every hour
+    const interval = setInterval(this.updateCache, 60 * 60 * 1000);
+    interval?.unref?.();
+  };
+
+  private updateCache = () => {
     if (this.drainer) {
       this.drainer.abort();
       this.drainer = null;
@@ -145,19 +163,6 @@ class suggest {
       }),
       (this.drainer = pull.drain(() => {})),
     );
-
-    const that = this;
-    this.ssb.close.hook(function (this: any, fn: any, args: any) {
-      if (that.drainer) {
-        that.drainer.abort();
-        that.drainer = null;
-      }
-      fn.apply(this, args);
-    });
-
-    // Refresh every hour
-    const interval = setInterval(this.start, 60 * 60 * 1000);
-    interval?.unref?.();
   };
 
   @muxrpc('async')
