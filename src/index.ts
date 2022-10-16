@@ -138,7 +138,7 @@ class suggest {
 
             for (const feedId of feedIds) {
               const profile = aboutSelfIndex.getProfile(feedId);
-              if (profile.name) {
+              if (profile.name && typeof profile.name === 'string') {
                 const latestKVT = latestKVTs[feedId];
                 this.cache.set(feedId, {
                   id: feedId,
